@@ -1,0 +1,4 @@
+server:
+  port: 8081
+dtm:
+  svr: "http://localhost:8080/api/dtmsvr"
