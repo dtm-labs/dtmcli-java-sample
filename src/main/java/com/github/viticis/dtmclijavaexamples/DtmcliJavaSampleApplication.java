@@ -7,13 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class DtmcliJavaExamplesApplication {
+public class DtmcliJavaSampleApplication {
 
     @Value("${dtm.svr}")
     private String dtm;
 
     public static void main(String[] args) {
-        SpringApplication.run(DtmcliJavaExamplesApplication.class, args);
+        SpringApplication.run(DtmcliJavaSampleApplication.class, args);
     }
 
     @Bean

@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.github.viticis</groupId>
-    <artifactId>dtmcli-java-examples</artifactId>
+    <artifactId>dtmcli-java-sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>dtmcli-java-examples</name>
-    <description>dtmcli-java-examples</description>
+    <name>dtmcli-java-sample</name>
+    <description>dtmcli-java-sample</description>
     <properties>
         <java.version>11</java.version>
     </properties>
