@@ -1,4 +1,0 @@
-server:
-  port: 8081
-dtm:
-  address: "localhost:8080"
