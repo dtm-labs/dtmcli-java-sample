@@ -1,6 +1,5 @@
 package com.dtmcli.java.sample.controller;
 
-import cn.hutool.http.server.HttpServerResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,7 @@ public class TransController {
     }
     
     @RequestMapping("TransOutConfirm")
-    public Map<String, String> TransOutConfirm(HttpServerResponse response) {
+    public Map<String, String> TransOutConfirm() {
         logger.info("TransOutConfirm");
         Map<String, String> result = new HashMap<>();
         result.put("dtm_result", "SUCCESS");

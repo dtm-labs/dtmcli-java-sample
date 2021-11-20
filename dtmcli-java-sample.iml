@@ -94,7 +94,7 @@
     <orderEntry type="library" name="Maven: com.github.viticis:dtmcli-java:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-http:5.7.9" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-core:5.7.9" level="project" />
-    <orderEntry type="library" name="Maven: cn.hutool:hutool-json:5.7.9" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.78" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.20" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.7.15" level="project" />
   </component>
