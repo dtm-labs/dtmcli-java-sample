@@ -41,4 +41,27 @@ public class TccController {
         }
         return false;
     }
+    
+    @RequestMapping("tccBarrier")
+    public String test() throws Exception {
+        DtmServerInfo dtmServerInfo = new DtmServerInfo(address);
+        String gid = IdGeneratorUtil.genGid(dtmServerInfo.newGid());
+        TransBase transBase = new TransBase(TransTypeEnum.TCC, gid, false);
+        Tcc tcc = new Tcc(transBase, dtmServerInfo);
+        Function<Tcc, Boolean> function = TccController::tccBarrierTrans;
+        return tcc.tccGlobalTransaction(function);
+    }
+    
+    public static Boolean tccBarrierTrans(Tcc tcc) {
+        try {
+            boolean a = tcc.callBranch("", svc + "/barrierTransOutTry", svc + "/barrierTransOutConfirm",
+                    svc + "/barrierTransOutCancel");
+            boolean b = tcc.callBranch("", svc + "/barrierTransInTry", svc + "/barrierTransInConfirm",
+                    svc + "/barrierTransInCancel");
+            return a && b;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
