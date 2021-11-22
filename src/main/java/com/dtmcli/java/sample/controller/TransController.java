@@ -11,44 +11,44 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api")
 public class TransController {
-    
+
     Logger logger = LoggerFactory.getLogger(TransController.class);
-    
+
     @RequestMapping("TransOutTry")
-    public TransResponse TransOutTry() {
+    public Object TransOutTry() {
         logger.info("TransOutTry");
         return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
-    
+
     @RequestMapping("TransOutConfirm")
-    public TransResponse TransOutConfirm() {
+    public Object TransOutConfirm() {
         logger.info("TransOutConfirm");
         return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
-        
+
     }
-    
+
     @RequestMapping("TransOutCancel")
-    public TransResponse TransOutCancel() {
+    public Object TransOutCancel() {
         logger.info("TransOutCancel");
         return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
-        
+
     }
-    
+
     @RequestMapping("TransInTry")
-    public TransResponse TransInTry() {
+    public Object TransInTry() {
         logger.info("TransInTry");
         return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
-        
+
     }
-    
+
     @RequestMapping("TransInConfirm")
-    public TransResponse TransInConfirm() {
+    public Object TransInConfirm() {
         logger.info("TransInConfirm");
         return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
-    
+
     @RequestMapping("TransInCancel")
-    public TransResponse TransInCancel() {
+    public Object TransInCancel() {
         logger.info("TransInCancel");
         return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
