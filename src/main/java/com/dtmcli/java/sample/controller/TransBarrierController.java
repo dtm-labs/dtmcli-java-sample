@@ -1,18 +1,20 @@
 package com.dtmcli.java.sample.controller;
 
+import barrier.BarrierParam;
 import barrier.BranchBarrier;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import common.constant.Constant;
+import common.model.TransResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api")
@@ -21,116 +23,110 @@ public class TransBarrierController {
     
     Logger logger = LoggerFactory.getLogger(TransBarrierController.class);
     
+    @Value("${spring.datasource.url}")
+    private String url;
+    
+    @Value("${spring.datasource.username}")
+    private String userName;
+    
+    @Value("${spring.datasource.password}")
+    private String password;
+    
+    
     @RequestMapping("barrierTransOutTry")
-    public Map<String, String> TransOutTry(@RequestBody(required = false) BranchBarrier branchBarrier)
-            throws SQLException {
+    public TransResponse TransOutTry(@RequestBody BarrierParam barrierParam) throws SQLException {
+        BranchBarrier branchBarrier = new BranchBarrier(barrierParam);
         logger.info("barrierTransOutTry branchBarrier:{}", branchBarrier);
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
-        mysqlDataSource.setUser("root");
-        mysqlDataSource
-                .setURL("jdbc:mysql://localhost:3306/dtm_barrier?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
-        mysqlDataSource.setPassword("12345678");
+        mysqlDataSource.setUser(userName);
+        mysqlDataSource.setURL(url);
+        mysqlDataSource.setPassword(password);
         Connection connection = mysqlDataSource.getConnection();
         branchBarrier.call(connection, () -> {
-            System.out.println("转出事务");
+            System.out.println("转出准备");
             return true;
         });
-        Map<String, String> result = new HashMap<>();
-        result.put("dtm_result", "SUCCESS");
-        return result;
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransOutConfirm")
-    public Map<String, String> TransOutConfirm(@RequestBody(required = false) BranchBarrier branchBarrier)
-            throws SQLException {
+    public TransResponse TransOutConfirm(@RequestBody BarrierParam barrierParam) throws SQLException {
+        BranchBarrier branchBarrier = new BranchBarrier(barrierParam);
         logger.info("barrierTransOutConfirm branchBarrier:{}", branchBarrier);
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
-        mysqlDataSource.setUser("root");
-        mysqlDataSource
-                .setURL("jdbc:mysql://localhost:3306/dtm_barrier?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
-        mysqlDataSource.setPassword("12345678");
+        mysqlDataSource.setUser(userName);
+        mysqlDataSource.setURL(url);
+        mysqlDataSource.setPassword(password);
         Connection connection = mysqlDataSource.getConnection();
         branchBarrier.call(connection, () -> {
-            System.out.println("转出事务提交");
+            System.out.println("转出提交");
             return true;
         });
-        Map<String, String> result = new HashMap<>();
-        result.put("dtm_result", "SUCCESS");
-        return result;
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransOutCancel")
-    public Map<String, String> TransOutCancel(@RequestBody(required = false) BranchBarrier branchBarrier)
-            throws SQLException {
+    public TransResponse TransOutCancel(@RequestBody BarrierParam barrierParam) throws SQLException {
+        BranchBarrier branchBarrier = new BranchBarrier(barrierParam);
         logger.info("barrierTransOutCancel branchBarrier:{}", branchBarrier);
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
-        mysqlDataSource.setUser("root");
-        mysqlDataSource
-                .setURL("jdbc:mysql://localhost:3306/dtm_barrier?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
-        mysqlDataSource.setPassword("12345678");
+        mysqlDataSource.setUser(userName);
+        mysqlDataSource.setURL(url);
+        mysqlDataSource.setPassword(password);
         Connection connection = mysqlDataSource.getConnection();
         branchBarrier.call(connection, () -> {
-            System.out.println("转出事务回滚");
+            System.out.println("转出回滚");
             return true;
         });
-        Map<String, String> result = new HashMap<>();
-        result.put("dtm_result", "SUCCESS");
-        return result;
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransInTry")
-    public Map<String, String> TransInTry(@RequestBody(required = false) BranchBarrier branchBarrier)
-            throws SQLException {
+    public TransResponse TransInTry(@RequestBody BarrierParam barrierParam) throws SQLException {
+        BranchBarrier branchBarrier = new BranchBarrier(barrierParam);
         logger.info("barrierTransInTry branchBarrier:{}", branchBarrier);
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
-        mysqlDataSource.setUser("root");
-        mysqlDataSource
-                .setURL("jdbc:mysql://localhost:3306/dtm_barrier?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
-        mysqlDataSource.setPassword("12345678");
+        mysqlDataSource.setUser(userName);
+        mysqlDataSource.setURL(url);
+        mysqlDataSource.setPassword(password);
         Connection connection = mysqlDataSource.getConnection();
         branchBarrier.call(connection, () -> {
-            System.out.println("转入事务");
+            System.out.println("转入准备");
             return true;
         });
-        Map<String, String> result = new HashMap<>();
-        result.put("dtm_result", "SUCCESS");
-        return result;
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransInConfirm")
-    public Map<String, String> TransInConfirm(@RequestBody BranchBarrier branchBarrier) throws SQLException {
-        logger.info("barrierTransInConfirm bTransInCancelranchBarrier:{}", branchBarrier);
+    public TransResponse TransInConfirm(@RequestBody BarrierParam barrierParam) throws SQLException {
+        BranchBarrier branchBarrier = new BranchBarrier(barrierParam);
+        logger.info("barrierTransInConfirm TransInCancel branchBarrier:{}", branchBarrier);
+        
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
-        mysqlDataSource.setUser("root");
-        mysqlDataSource
-                .setURL("jdbc:mysql://localhost:3306/dtm_barrier?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
-        mysqlDataSource.setPassword("12345678");
+        mysqlDataSource.setUser(userName);
+        mysqlDataSource.setURL(url);
+        mysqlDataSource.setPassword(password);
         Connection connection = mysqlDataSource.getConnection();
         branchBarrier.call(connection, () -> {
-            System.out.println("转入事务提交");
+            System.out.println("转入提交");
             return true;
         });
-        Map<String, String> result = new HashMap<>();
-        result.put("dtm_result", "SUCCESS");
-        return result;
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransInCancel")
-    public Map<String, String> TransInCancel(@RequestBody(required = false) BranchBarrier branchBarrier)
-            throws SQLException {
+    public TransResponse TransInCancel(@RequestBody BarrierParam barrierParam) throws SQLException {
+        BranchBarrier branchBarrier = new BranchBarrier(barrierParam);
         logger.info("barrierTransInCancel branchBarrier:{}", branchBarrier);
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
-        mysqlDataSource.setUser("root");
-        mysqlDataSource
-                .setURL("jdbc:mysql://localhost:3306/dtm_barrier?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
-        mysqlDataSource.setPassword("12345678");
+        mysqlDataSource.setUser(userName);
+        mysqlDataSource.setURL(url);
+        mysqlDataSource.setPassword(password);
         Connection connection = mysqlDataSource.getConnection();
         branchBarrier.call(connection, () -> {
-            System.out.println("转入事务回滚");
+            System.out.println("转入回滚");
             return true;
         });
-        Map<String, String> result = new HashMap<>();
-        result.put("dtm_result", "SUCCESS");
-        return result;
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
 }
