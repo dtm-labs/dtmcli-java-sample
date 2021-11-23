@@ -62,7 +62,7 @@ public class TccController {
     
     public static Boolean tccBarrierTrans(Tcc tcc) {
         try {
-            Response outResponse = tcc.callBranch("", svc + "/barrierTransOutTry", svc + "/barrierTransOutConfirm",
+            Response outResponse = tcc.callBranch("", svc + "/barrierTransOutTry?lxs=123", svc + "/barrierTransOutConfirm",
                     svc + "/barrierTransOutCancel");
             Response inResponse = tcc.callBranch("", svc + "/barrierTransInTry", svc + "/barrierTransInConfirm",
                     svc + "/barrierTransInCancel");
