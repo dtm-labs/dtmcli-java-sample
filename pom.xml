@@ -18,6 +18,7 @@
     
     <properties>
         <java.version>1.8</java.version>
+        <dtmcli-java.version>v1.5.4</dtmcli-java.version>
     </properties>
     
     <dependencies>
@@ -41,11 +42,18 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.viticis</groupId>
+            <groupId>com.github.yedf</groupId>
             <artifactId>dtmcli-java</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>v1.5.4</version>
         </dependency>
     </dependencies>
+    
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     
     <build>
         <plugins>
