@@ -14,8 +14,7 @@ docker-compose up
 运行服务
 
 ```
-pip3 install flask
-flask run
+mvn package && java -jar target/dtmcli-java-sample-0.0.1-SNAPSHOT.jar
 ```
 
 触发成功的TCC事务
