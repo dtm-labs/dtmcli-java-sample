@@ -2,18 +2,17 @@ package com.dtmcli.java.sample.controller;
 
 import client.DtmClient;
 import com.dtmcli.java.sample.param.TransReq;
-import common.constant.Constant;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tcc.Tcc;
 
-import java.util.Objects;
-
 
 @RestController
 @RequestMapping(("api"))
+@Slf4j
 public class TccTestController {
     
     private static final String svc = "http://localhost:8081/api";
@@ -25,17 +24,60 @@ public class TccTestController {
      * 常规tcc demo
      *
      * @return
-     * @throws Exception
      */
     @RequestMapping("testTcc")
-    public String testTcc() throws Exception {
+    public String testTcc() {
         //创建dtm clinet
         DtmClient dtmClient = new DtmClient(ipPort);
         //创建tcc事务
-        Tcc tcc = dtmClient.newTcc(dtmClient.genGid());
-        // 执行事务
-        return tcc.tccGlobalTransaction(TccTestController::tccTrans);
+        try {
+            dtmClient.tccGlobalTransaction(dtmClient.genGid(), TccTestController::tccTrans);
+        } catch (Exception e) {
+            log.error("tccGlobalTransaction error", e);
+            return "fail";
+        }
+        return "success";
     }
+    
+    
+    /**
+     * 具有子事务屏障功能的tcc demo (转账成功)
+     *
+     * @return
+     */
+    @RequestMapping("tccBarrier")
+    public String tccBarrier() {
+        // 创建dmt client
+        DtmClient dtmClient = new DtmClient(ipPort);
+        //创建tcc事务
+        try {
+            dtmClient.tccGlobalTransaction(dtmClient.genGid(), TccTestController::tccBarrierTrans);
+        } catch (Exception e) {
+            log.error("tccGlobalTransaction error", e);
+            return "fail";
+        }
+        return "success";
+    }
+    
+    /**
+     * 具有子事务屏障功能的tcc demo (转账失败)
+     *
+     * @return
+     */
+    @RequestMapping("tccBarrierError")
+    public String tccBarrierError() {
+        // 创建dmt client
+        DtmClient dtmClient = new DtmClient(ipPort);
+        //创建tcc事务
+        try {
+            dtmClient.tccGlobalTransaction(dtmClient.genGid(), TccTestController::tccBarrierTransError);
+        } catch (Exception e) {
+            log.error("tccGlobalTransaction error", e);
+            return "fail";
+        }
+        return "success";
+    }
+    
     
     /**
      * 定义tcc事务函数，内部需要通过callBranch注册事务子分支
@@ -44,45 +86,12 @@ public class TccTestController {
      * @return
      * @see TransController
      */
-    public static Boolean tccTrans(Tcc tcc) {
-        try {
-            Response outResponse = tcc
-                    .callBranch("", svc + "/TransOutTry", svc + "/TransOutConfirm", svc + "/TransOutCancel");
-            Response inResponse = tcc
-                    .callBranch("", svc + "/TransInTry", svc + "/TransInConfirm", svc + "/TransInCancel");
-            boolean outResult = false;
-            boolean inResult = false;
-            if (Objects.nonNull(outResponse) && Objects.nonNull(outResponse.body())) {
-                if (outResponse.body().string().contains(Constant.SUCCESS_RESULT)) {
-                    outResult = true;
-                }
-            }
-            if (Objects.nonNull(inResponse) && Objects.nonNull(inResponse.body())) {
-                if (inResponse.body().string().contains(Constant.SUCCESS_RESULT)) {
-                    inResult = true;
-                }
-            }
-            return outResult && inResult;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    
-    /**
-     * 具有子事务屏障功能的tcc demo
-     *
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping("tccBarrier")
-    public String test() throws Exception {
-        // 创建dmt client
-        DtmClient dtmClient = new DtmClient(ipPort);
-        // 创建tcc事务
-        Tcc tcc = dtmClient.newTcc(dtmClient.genGid());
-        // 执行事务
-        return tcc.tccGlobalTransaction(TccTestController::tccBarrierTrans);
+    public static void tccTrans(Tcc tcc) throws Exception {
+        Response outResponse = tcc
+                .callBranch("", svc + "/TransOutTry", svc + "/TransOutConfirm", svc + "/TransOutCancel");
+        log.info("outResponse:{}", outResponse);
+        Response inResponse = tcc.callBranch("", svc + "/TransInTry", svc + "/TransInConfirm", svc + "/TransInCancel");
+        log.info("inResponse:{}", inResponse);
     }
     
     
@@ -93,32 +102,40 @@ public class TccTestController {
      * @return
      * @see TransBarrierController
      */
-    public static Boolean tccBarrierTrans(Tcc tcc) {
-        try {
-            // 用户1 转出30元
-            Response outResponse = tcc
-                    .callBranch(new TransReq(1, -30), svc + "/barrierTransOutTry", svc + "/barrierTransOutConfirm",
-                            svc + "/barrierTransOutCancel");
-            // 用户2 转入30元
-            Response inResponse = tcc
-                    .callBranch(new TransReq(2, 30), svc + "/barrierTransInTry", svc + "/barrierTransInConfirm",
-                            svc + "/barrierTransInCancel");
-            boolean outResult = false;
-            boolean inResult = false;
-            if (Objects.nonNull(outResponse) && Objects.nonNull(outResponse.body())) {
-                if (outResponse.body().string().contains(Constant.SUCCESS_RESULT)) {
-                    outResult = true;
-                }
-            }
-            if (Objects.nonNull(inResponse) && Objects.nonNull(inResponse.body())) {
-                if (inResponse.body().string().contains(Constant.SUCCESS_RESULT)) {
-                    inResult = true;
-                }
-            }
-            return outResult && inResult;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+    public static void tccBarrierTrans(Tcc tcc) throws Exception {
+        // 用户1 转出30元
+        Response outResponse = tcc
+                .callBranch(new TransReq(1, -30), svc + "/barrierTransOutTry", svc + "/barrierTransOutConfirm",
+                        svc + "/barrierTransOutCancel");
+        log.info("outResponse:{}", outResponse);
+        
+        // 用户2 转入30元
+        Response inResponse = tcc
+                .callBranch(new TransReq(2, 30), svc + "/barrierTransInTry", svc + "/barrierTransInConfirm",
+                        svc + "/barrierTransInCancel");
+        log.info("inResponse:{}", inResponse);
+        
+    }
+    
+    /**
+     * 定义tcc事务函数，内部需要通过callBranch注册事务子分支， 转账金额大于余额 转账失败
+     *
+     * @param tcc
+     * @return
+     * @see TransBarrierController
+     */
+    public static void tccBarrierTransError(Tcc tcc) throws Exception {
+        // 用户1 转出100000元
+        Response outResponse = tcc
+                .callBranch(new TransReq(1, -100000), svc + "/barrierTransOutTry", svc + "/barrierTransOutConfirm",
+                        svc + "/barrierTransOutCancel");
+        log.info("outResponse:{}", outResponse);
+        
+        // 用户2 转入100000元
+        Response inResponse = tcc
+                .callBranch(new TransReq(2, 100000), svc + "/barrierTransInTry", svc + "/barrierTransInConfirm",
+                        svc + "/barrierTransInCancel");
+        log.info("inResponse:{}", inResponse);
+        
     }
 }

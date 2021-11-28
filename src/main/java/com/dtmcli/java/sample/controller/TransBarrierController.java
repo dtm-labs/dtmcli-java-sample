@@ -7,6 +7,7 @@ import com.dtmcli.java.sample.util.DataSourceUtil;
 import common.constant.Constant;
 import common.model.TransResponse;
 import common.utils.StreamUtil;
+import exception.FailureException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +98,7 @@ public class TransBarrierController {
         Connection connection = dataSourceUtil.getConnecion();
         TransReq transReq = extracted(request);
         branchBarrier.call(connection, (barrier) -> {
-            System.out.println("用户: +" + transReq.getUserId() + ",转出" + Math.abs(transReq.getAmount()) + "元提交");
+            System.out.println("用户: +" + transReq.getUserId() + ",转入" + Math.abs(transReq.getAmount()) + "元提交");
             adjustBalance(connection, transReq);
         });
         connection.close();
@@ -137,20 +138,24 @@ public class TransBarrierController {
      * @param transReq
      * @throws SQLException
      */
-    public void adjustTrading(Connection connection, TransReq transReq) {
+    public void adjustTrading(Connection connection, TransReq transReq) throws Exception {
         String sql = "update dtm_busi.user_account set trading_balance=trading_balance+?"
                 + " where user_id=? and trading_balance + ? + balance >= 0";
+        PreparedStatement preparedStatement = null;
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, transReq.getAmount());
             preparedStatement.setInt(2, transReq.getUserId());
             preparedStatement.setInt(3, transReq.getAmount());
             if (preparedStatement.executeUpdate() > 0) {
                 System.out.println("交易金额更新成功");
+            } else {
+                throw new FailureException("交易失败");
             }
-            preparedStatement.close();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+        } finally {
+            if (null != preparedStatement) {
+                preparedStatement.close();
+            }
         }
         
     }
@@ -158,19 +163,21 @@ public class TransBarrierController {
     /**
      * 更新余额
      */
-    public void adjustBalance(Connection connection, TransReq transReq) {
+    public void adjustBalance(Connection connection, TransReq transReq) throws SQLException {
+        PreparedStatement preparedStatement = null;
         try {
             String sql = "update dtm_busi.user_account set trading_balance=trading_balance-?,balance=balance+? where user_id=?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, transReq.getAmount());
             preparedStatement.setInt(2, transReq.getAmount());
             preparedStatement.setInt(3, transReq.getUserId());
             if (preparedStatement.executeUpdate() > 0) {
                 System.out.println("余额更新成功");
             }
-            preparedStatement.close();
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+        } finally {
+            if (null != preparedStatement) {
+                preparedStatement.close();
+            }
         }
     }
     
