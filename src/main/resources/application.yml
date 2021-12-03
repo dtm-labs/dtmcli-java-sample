@@ -2,7 +2,7 @@ server:
   port: 8081
 
 dtm:
-  ipPort: "localhost:8080"
+  ipPort: 'localhost:36789'
 
 spring:
   datasource:
