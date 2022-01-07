@@ -1,14 +1,7 @@
 ### 快速开始
 
 #### 启动dtm
-
-首先安装docker版本20.04以上
-
-```
-git clone https://github.com/dtm-labs/dtm
-cd dtm && git checkout v1.7.5
-docker-compose up
-```
+参考[dtm安装运行](https://dtm.pub/guide/install.html)
 
 #### 运行示例
 运行服务
