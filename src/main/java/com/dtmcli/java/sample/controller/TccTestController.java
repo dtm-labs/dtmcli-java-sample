@@ -1,13 +1,15 @@
 package com.dtmcli.java.sample.controller;
 
-import client.DtmClient;
 import com.dtmcli.java.sample.param.TransReq;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tcc.Tcc;
+import pub.dtm.client.DtmClient;
+import pub.dtm.client.tcc.Tcc;
+
+import java.util.UUID;
 
 
 @RestController
@@ -17,8 +19,8 @@ public class TccTestController {
     
     private static final String svc = "http://localhost:8081/api";
     
-    @Value("${dtm.ipPort}")
-    private String ipPort;
+    @Value("${dtm.server.endpoint}")
+    private String endpoint;
     
     /**
      * 常规tcc demo
@@ -28,10 +30,11 @@ public class TccTestController {
     @RequestMapping("testTcc")
     public String testTcc() {
         //创建dtm clinet
-        DtmClient dtmClient = new DtmClient(ipPort);
+        DtmClient dtmClient = new DtmClient(endpoint);
         //创建tcc事务
+        String customGid = UUID.randomUUID().toString();
         try {
-            dtmClient.tccGlobalTransaction(dtmClient.genGid(), TccTestController::tccTrans);
+            dtmClient.tccGlobalTransaction(customGid, TccTestController::tccTrans);
         } catch (Exception e) {
             log.error("tccGlobalTransaction error", e);
             return "fail";
@@ -48,10 +51,11 @@ public class TccTestController {
     @RequestMapping("tccBarrier")
     public String tccBarrier() {
         // 创建dmt client
-        DtmClient dtmClient = new DtmClient(ipPort);
+        DtmClient dtmClient = new DtmClient(endpoint);
         //创建tcc事务
+        String customGid = UUID.randomUUID().toString();
         try {
-            dtmClient.tccGlobalTransaction(dtmClient.genGid(), TccTestController::tccBarrierTrans);
+            dtmClient.tccGlobalTransaction(customGid, TccTestController::tccBarrierTrans);
         } catch (Exception e) {
             log.error("tccGlobalTransaction error", e);
             return "fail";
@@ -67,10 +71,11 @@ public class TccTestController {
     @RequestMapping("tccBarrierError")
     public String tccBarrierError() {
         // 创建dmt client
-        DtmClient dtmClient = new DtmClient(ipPort);
+        DtmClient dtmClient = new DtmClient(endpoint);
         //创建tcc事务
+        String customGid = UUID.randomUUID().toString();
         try {
-            dtmClient.tccGlobalTransaction(dtmClient.genGid(), TccTestController::tccBarrierTransError);
+            dtmClient.tccGlobalTransaction(customGid, TccTestController::tccBarrierTransError);
         } catch (Exception e) {
             log.error("tccGlobalTransaction error", e);
             return "fail";

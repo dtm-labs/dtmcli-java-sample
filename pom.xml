@@ -42,9 +42,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.yedf</groupId>
+            <groupId>pub.dtm</groupId>
             <artifactId>dtmcli-java</artifactId>
-            <version>v1.5.4</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
     
