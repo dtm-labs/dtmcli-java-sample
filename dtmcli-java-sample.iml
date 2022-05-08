@@ -86,7 +86,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.8.2" level="project" />
-    <orderEntry type="library" name="Maven: com.github.viticis:dtmcli-java:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: com.github.dtm-labs:dtmcli-java:PR27-b93913c673-1" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.78" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.20" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.14.9" level="project" />

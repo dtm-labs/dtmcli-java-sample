@@ -52,4 +52,28 @@ public class TransController {
         logger.info("TransInCancel");
         return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
     }
+
+    @RequestMapping("TransOut")
+    public Object TransOut() {
+        logger.info("TransOut");
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+    }
+
+    @RequestMapping("TransOutCompensate")
+    public Object TransOutCompensate() {
+        logger.info("TransOutCompensate");
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+    }
+
+    @RequestMapping("TransIn")
+    public Object TransIn() {
+        logger.info("TransIn");
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+    }
+
+    @RequestMapping("TransInCompensate")
+    public Object TransInCompensate() {
+        logger.info("TransInCompensate");
+        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+    }
 }
