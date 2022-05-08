@@ -2,7 +2,6 @@ package com.dtmcli.java.sample.controller;
 
 import com.dtmcli.java.sample.param.TransReq;
 import com.dtmcli.java.sample.util.DataSourceUtil;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import pub.dtm.client.barrier.BranchBarrier;
 import pub.dtm.client.constant.Constants;
 import pub.dtm.client.exception.FailureException;
 import pub.dtm.client.model.responses.DtmResponse;
+import pub.dtm.client.utils.JsonUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -128,7 +128,7 @@ public class TransBarrierController {
      */
     private TransReq extracted(HttpServletRequest request) throws IOException {
         byte[] bytes = StreamUtils.copyToByteArray(request.getInputStream());
-        return new Gson().fromJson(new String(bytes), TransReq.class);
+        return JsonUtils.parseJson(bytes, TransReq.class);
     }
     
     /**

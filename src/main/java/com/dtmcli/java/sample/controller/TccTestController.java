@@ -19,7 +19,7 @@ public class TccTestController {
     
     private static final String svc = "http://localhost:8081/api";
     
-    @Value("${dtm.server.endpoint}")
+    @Value("${dtm.ipport}")
     private String endpoint;
     
     /**
