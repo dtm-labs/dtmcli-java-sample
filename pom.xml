@@ -42,18 +42,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.yedf</groupId>
+            <groupId>io.github.dtm-labs</groupId>
             <artifactId>dtmcli-java</artifactId>
-            <version>v1.5.4</version>
+            <version>2.1.0</version>
         </dependency>
     </dependencies>
-    
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
     
     <build>
         <plugins>

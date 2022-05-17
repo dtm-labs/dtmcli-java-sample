@@ -1,6 +1,7 @@
 ### 快速开始
 
-#### 启动dtm
+#### 安装运行dtm
+
 参考[dtm安装运行](https://dtm.pub/guide/install.html)
 
 #### 运行示例
