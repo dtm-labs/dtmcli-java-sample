@@ -1,19 +1,19 @@
 package com.dtmcli.java.sample.controller;
 
-import barrier.BranchBarrier;
-import com.alibaba.fastjson.JSON;
 import com.dtmcli.java.sample.param.TransReq;
 import com.dtmcli.java.sample.util.DataSourceUtil;
-import common.constant.Constant;
-import common.model.TransResponse;
-import common.utils.StreamUtil;
-import exception.FailureException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pub.dtm.client.barrier.BranchBarrier;
+import pub.dtm.client.constant.Constants;
+import pub.dtm.client.exception.FailureException;
+import pub.dtm.client.model.responses.DtmResponse;
+import pub.dtm.client.utils.JsonUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class TransBarrierController {
             this.adjustTrading(connection, transReq);
         });
         connection.close();
-        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+        return DtmResponse.buildDtmResponse(Constants.SUCCESS_RESULT);
     }
     
     
@@ -60,7 +60,7 @@ public class TransBarrierController {
             adjustBalance(connection, transReq);
         });
         connection.close();
-        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+        return DtmResponse.buildDtmResponse(Constants.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransOutCancel")
@@ -74,7 +74,7 @@ public class TransBarrierController {
             this.adjustTrading(connection, transReq);
         });
         connection.close();
-        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+        return DtmResponse.buildDtmResponse(Constants.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransInTry")
@@ -88,7 +88,7 @@ public class TransBarrierController {
             this.adjustTrading(connection, transReq);
         });
         connection.close();
-        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+        return DtmResponse.buildDtmResponse(Constants.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransInConfirm")
@@ -102,7 +102,7 @@ public class TransBarrierController {
             adjustBalance(connection, transReq);
         });
         connection.close();
-        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+        return DtmResponse.buildDtmResponse(Constants.SUCCESS_RESULT);
     }
     
     @RequestMapping("barrierTransInCancel")
@@ -116,7 +116,7 @@ public class TransBarrierController {
             this.adjustTrading(connection, transReq);
         });
         connection.close();
-        return TransResponse.buildTransResponse(Constant.SUCCESS_RESULT);
+        return DtmResponse.buildDtmResponse(Constants.SUCCESS_RESULT);
     }
     
     /**
@@ -127,8 +127,8 @@ public class TransBarrierController {
      * @throws IOException
      */
     private TransReq extracted(HttpServletRequest request) throws IOException {
-        byte[] bytes = StreamUtil.copyToByteArray(request.getInputStream());
-        return JSON.parseObject(bytes, TransReq.class);
+        byte[] bytes = StreamUtils.copyToByteArray(request.getInputStream());
+        return JsonUtils.parseJson(bytes, TransReq.class);
     }
     
     /**

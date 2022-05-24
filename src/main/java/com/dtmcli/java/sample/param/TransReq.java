@@ -33,6 +33,12 @@ public class TransReq {
      * 转入/转出金额
      */
     private int amount;
+
+    /**
+     * jackson 必须使用无参构造
+     */
+    public TransReq(){
+    }
     
     public TransReq(int userId, int amount) {
         this.userId = userId;
