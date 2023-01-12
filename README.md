@@ -13,10 +13,10 @@ mvn package && java -jar target/dtmcli-java-sample-0.0.1-SNAPSHOT.jar
 
 触发成功的TCC事务
 ```
-curl localhost:8081/tccBarrier
+curl localhost:8081/api/tccBarrier
 ```
 
 触发回滚的TCC事务
 ```
-curl localhost:8081/tccBarrierError
+curl localhost:8081/api/tccBarrierError
 ```
